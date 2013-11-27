@@ -188,12 +188,12 @@
 		<li>Sharded CDN (cookie-less) domains<ul><li>no cookie payload (8kB)<li> more 	
 		parallel connections<li>we would like to serve JS and CSS from static domains yet</ul>
 	<!-- separate slide -->
-	<li>We would like to try lazy loading of images on the lists 
+	<li>We would like to try lazy loading of images on the lists (<a href="https://github.com/toddmotto/echo">Echo?</a>)
 	<ul><li>Usually out of viewport<li>37 requests to static.trustedreviews.com
 	<li>... these requests block onload
 	<li>... but sharded CDN should be the optimal solution here.</ul>
 	<!-- separate slide -->
-	<li>HTML minification (10-30% savings)
+	<li>HTML minification (10-30% savings, <a href="http://modpagespeed.com/">mod_pagespeed?</a>) 
 	<li>not everything is gzipped... includes/*.js ?
 	<li>images are not 100% optimized, we can do better, including our sprites
 	
