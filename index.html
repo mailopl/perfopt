@@ -158,6 +158,7 @@
 	 	<li>We moved the rest of images to sprites = 5 requests saved
 		<li>Combined almost every CSS stylesheet we had = 3 requests saved
 		<li>We removed the CSS for print, in two places = 2 requests	
+		<li><b>We removed a 1500 lines long SCSS file</b></li>
 		<li>Removed duplicated scripts (facebook...) - are you sure you don't have any ? = 1x304 (Not Modified) saved	
 	  	<li>Disqus loading on scroll to comments box - 20 ? 30 ?
 		<li>Minified Omniture with rest of JS (doesn't matter, will be removed by end of year) = 1 request
@@ -187,7 +188,7 @@
 		<li>Sharded CDN (cookie-less) domains<ul><li>no cookie payload (8kB)<li> more 	
 		parallel connections<li>we would like to serve JS and CSS from static domains yet</ul>
 	<!-- separate slide -->
-	<li>Lazy loading of images on the lists 
+	<li>We would like to try lazy loading of images on the lists 
 	<ul><li>Usually out of viewport<li>37 requests to static.trustedreviews.com
 	<li>... these requests block onload
 	<li>... but sharded CDN should be the optimal solution here.</ul>
@@ -196,7 +197,7 @@
 	<li>not everything is gzipped... includes/*.js ?
 	<li>images are not 100% optimized, we can do better, including our sprites
 	
-	<li>jquery is not minified with rest of our JS
+	<li>Serve jQuery from Google CDN, or minified with the rest of assets?
 	<li>in some places we have deep level nesting - 15+ levels (<a href="http://mir.aculo.us/dom-monster/">DOMMonster</a>)
 	<li>we would like to try localStorage, and keep there YUI and jquery, and large inline scripts (1kB+) - <a href="addyosmani.github.io/basket.js/">basket.js</a>
 	  </ul>
@@ -215,8 +216,6 @@
 	  <p>
 	  Don't be afraid to experiment
 	  <br>Use CSS instead of images if possible - (buttons? arrows? shadows? borders?)<br>
-	  <br>"Web performance & optimization is a process, not a checklist"
-	  "Don't ask for permission, ask for forgiveness."
 	  </p>
 	  <h4>Images</h3>
 	  <p>
@@ -232,11 +231,13 @@
 	 <article class="smaller">
 	  <h3>The thing is...</h3>
 	  <i>
-	 	<blockquote>"It's not about how fast your website is, it's about how fast user thinks it is."</blockquote>
-		<blockquote>"The fastest HTTP request is the one not made."</blockquote>
-		<blockquote>"Know the rules well so you can break them efficiently"</blockquote>
-		<blockquote>"1kB of JS is 1ms of parsing"</blockquote>
-		<blockquote>"The more GIFs the better"</blockquote>
+	 	<blockquote>"It's not about how fast your website is, it's about how fast user thinks it is." - Steve Souders</blockquote>
+		<blockquote>"The fastest HTTP request is the one not made." - Some Genius</blockquote>
+		<blockquote>"Know the rules well so you can break them efficiently" - Dalai Lama</blockquote>
+		<blockquote>"1kB of JS is 1ms of parsing" - Google</blockquote>
+		
+		<blockquote>"Web performance & optimization is a process, not a checklist" - I. Grigorik</blockquote>
+	  <blockquote>"Don't ask for permission, ask for forgiveness." - Facebook</blockquote>
 		</i>
 		<center><img src="http://i.imgur.com/7s8APdU.gif"></center>
 	  </article>
