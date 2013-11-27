@@ -130,7 +130,7 @@
 		  <li> Blocking (synchronous) JavaScript in body, placed randomly (inline or src)
 		  <li> YUI ? <li> jQuery ? <li>Analytics ? <li>Optimizely ? <li>IPC includes ? <li>Facebook connect? <li>Post.it ?		  
 	  </ul>
-	  <p>Everytime the tokenizer gets into the &lt;script&gt; tag (<i>without async or defer</i>), it stops <b>everything</b>, fetches the resource and/or parses the script - then it continues. 
+	  <p>Everytime the parser gets into the &lt;script&gt; tag (<i>without async or defer</i>), it stops <b>everything</b>, fetches the resource and/or parses the script - then it continues. 
 	  </p>
 	  </article>
 	  
@@ -142,8 +142,8 @@
 	   
 	  <p>
 		  <ul>
-			<li><b>async</b>  <a href="http://caniuse.com/#search=async">&gt;=IE9</a> - "A script that will be run asynchronously as soon as it is available", without blocking DOM construction
-			<li><b>defer</b>  <a href="http://caniuse.com/#search=defer">&gt;=IE8</a> - "A script that will not run until after the page has loaded"
+			<li><b>async</b>  <a href="http://caniuse.com/#search=async">&gt;=IE9</a> - "A script that will be run asynchronously as soon as it is available", without blocking the DOM construction process
+			<li><b>defer</b>  <a href="http://caniuse.com/#search=defer">&gt;=IE8</a> - "A script that will not run until the page has loaded"
 		  </ul>	
 	  </p>
 	
