@@ -4,348 +4,348 @@
 -->
 <!DOCTYPE html>
 <html>
-  <head>
-	<title>TR Performance Optimizations</title>
-	<meta charset='utf-8'>
-	<script src='./slides.js'></script>
-	 <style media="print">
-		 @page {
-			size: A4 landscape;
-			 @top-right {
-				content: "Page " counter(page);
-			 }
-		 }
-		  article {
-			page-break-after: always;
-			margin: auto;
-		  }
-		  article.next, article.past {
-			display: block;    
-		  }
-		  body {
-			  display: block !important;
-			  font-family: 'Open Sans', Arial, sans-serif;
-			  font-size: 1.5em;
-		  }
-		  .article{
-		page-brake-before:always;
-	}
-	</style>
+<head>
+    <title>TR Performance Optimizations</title>
+    <meta charset='utf-8'>
+    <script src='./slides.js'></script>
+    <style media="print">
+        @page {
+            size: A4 landscape;
+            @top-right {
+                content: "Page " counter(page);
+            }
+        }
+
+        article {
+            page-break-after: always;
+            margin: auto;
+        }
+
+        article.next, article.past {
+            display: block;
+        }
+
+        body {
+            display: block !important;
+            font-family: 'Open Sans', Arial, sans-serif;
+            font-size: 1.5em;
+        }
+
+        .article {
+            page-brake-before: always;
+        }
+    </style>
     <script type="text/javascript">
-	window.addEventListener('load', function(){
-		var link = document.getElementsByTagName('link');
-		link[link.length-1].setAttribute ("media","screen");
-	});
-	</script>
-  </head>
-  <style>
-	.slides.template-default > article:not(.nobackground):not(.biglogo) {
-	background-image: none !important;
-	}
-	.number{
-			width:300px;
-			text-align:right;
-			font-size:20px !important;
-			position:absolute;
-			bottom:20px;
-			right:20px;
-	}	  
-	.logo {
-		width: 147px;
-		height:64px;
-		background-image: url("./images/tr.png");
-		position: absolute;
-		bottom: 20px;
-		left: 20px;
-	}
-  </style>
-  <body style='display: none'>
-	<section class='slides layout-regular template-default'>
-	  <article>
-		<h1>
-		  <img src="./images/tr.png" />
-		   <br />
-		</h1>
-		<p>
-		 Performance optimization story 
-		</p>
-		<p style="font-size:12px;text-align:right;margin-top:300px;"><b>Nacho Team</b></p>
-	  </article>
-	
-	  <article>
-	  	
-		<h3>Quick roadmap</h3>
-		<ol>
-			<li> The problem
-			<li> The opportunity
-			<li> The reason
-			<li> The solution
-			<li> The actual optimizations
-			<li> The plans
-			<li> The tips
-			<!--<li> <b>Chrome Developer Tools</b> quick review-->
-			<li> The quotes, must-reads and a <b>nice chat</b>.
-		</ol>
-	  
-	  </article>
-	  
-	  <article class="smaller">
-	  	<h3> The problem </h3>
-		<p>The problem is that when page loads long, <b>bounce rate</b> goes up and <b>user satisfaction drops</b>.</p>
-		<br />
-		<center>
-			<p><img src="http://www.roaringtraffic.com/wp-content/uploads/2013/06/page-speed-abondonment-rate.jpeg" /></p>
-			<br /><br />
-			<h3 class="red">First bits of TR showed up after 11 seconds</h3>
-		</center>
-	  </article>
-	  
-	  <article class="smaller">
-	  <h3>The opportunity</h3>
-	  <p>Since we were doing new design anyway, I asked Ignacio if we could tune up performance a little bit..</p> <br />
-	  
-	  <h3>he said...</h3> <br />
-	  
-	  <center><img src="http://media.giphy.com/media/QBjH0bEtlZheg/giphy.gif"></center>
-	  </article>
-  
-	  <article class="smaller">
-	  <img src="./images/nacho.jpg" width="800px"/>
-	  <small><a style="font-size:12px;" href="http://www.imdb.com/title/tt0457510/">* Nacho Libre (2006) IMDB</a></small>
-		<p class="number">Performance tuning &nbsp;&nbsp; <b>1/25</b></p>
-	  </article>
-	  
-	  
-	  <article class="smaller">
-	  <h3>The reason</h3>
-	  <h4>We loaded lot of stuff before user could see the page</h4>
-	  <ul>
-	  <li>
-		  <li> Blocking (synchronous) JavaScript in head (inline or src)
-		  
-		  <li> Blocking (synchronous) JavaScript in body, placed randomly (inline or src)
-		  <li> YUI ? <li> jQuery ? <li>Analytics ? <li>Optimizely ? <li>IPC includes ? <li>Facebook connect? <li>Post.it ?		  
-	  </ul>
-	  <p>Everytime the tokenizer gets into the &lt;script&gt; tag (<i>without async or defer</i>), it stops <b>everything</b>, fetches the resource and/or parses the script - then it continues. 
-	  </p>
-	  </article>
-	  
-	  
-	 
-	    <article class="smaller">
-	  <h3>The solution</h3>
-	  <h4>We load less stuff before user sees the page *. Asynchronously.</h4>
-	   
-	  <p>
-		  <ul>
-			<li><b>async</b>  <a href="http://caniuse.com/#search=async">&gt;=IE9</a> - "A script that will be run asynchronously as soon as it is available", without blocking DOM construction
-			<li><b>defer</b>  <a href="http://caniuse.com/#search=defer">&gt;=IE8</a> - "A script that will not run until after the page has loaded"
-		  </ul>	
-	  </p>
-	
-<br />
-<center><img src="http://avc.name/wp-content/uploads/2012/04/script-defer-asyn.jpg" /></center>	  
-	<p style="position:absolute;bottom:40px;left:20px;"><small>* Apparently I broke a few things because of that (Omniture? Visual Revenue?). Keep in mind that you will probably break stuff.</small></p> 
-	  </article>
-	  
-	  
-	  	  
-	  
-	  
-	    <article class="smaller">
-	  <h3>Optimizations we did</h3>
-	  
-	  <ul>
-	 	<li>We moved the rest of images to sprites = 5 requests saved
-		<li>Combined almost every CSS stylesheet we had = 3 requests saved
-		<li>We removed the CSS for print, in two places = 2 requests	
-		<li>Removed duplicated scripts (facebook...) - are you sure you don't have any ? = 1x304 (Not Modified) saved	
-	  	<li>Disqus loading on scroll to comments box - 20 ? 30 ?
-		<li>Minified Omniture with rest of JS (doesn't matter, will be removed by end of year) = 1 request
-		<li><b>Made use of trViewKit::jsSlot() -&gt; moved all inline blocking JS to before body end - <i>probably</i> big impact</b>
-		<li>And of course, we made use of async, in three places, wow. 
-	  </ul>
-	  <center><img src="http://i.imgur.com/S25EO.gif"></center>
-	  </article>
-	  
-	  
-	  <article class="smaller">
-	  	<h3>Optimizations we did: WebPageTest <a href="http://www.webpagetest.org/video/compare.php?tests=131125_T3_104M%2C131117_96_KYR&thumbSize=200&ival=500&end=visual">before/after</a></h3>
-		<p>Before:</p>
-		<img src="http://i.imgur.com/doPd66m.png" width="800px" />
-		<p>After:</p>
-		<img src="http://i.imgur.com/UpckA1R.png" width="800px"/>
-		
-		<br />
-		<center><img src="http://i.imgur.com/P5vYTiQ.png" width="500px"/></center>
-	  </article>
-	  
-	      <article class="smaller">
-	  <h3>In plans</h3>
-	  <img style="float:right" src="data:image/jpeg;base64,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" />
-	  <ul>
-	  <!-- separate slide -->
-		<li>Sharded CDN (cookie-less) domains<ul><li>no cookie payload (8kB)<li> more 	
-		parallel connections<li>we would like to serve JS and CSS from static domains yet</ul>
-	<!-- separate slide -->
-	<li>Lazy loading of images on the lists 
-	<ul><li>Usually out of viewport<li>37 requests to static.trustedreviews.com
-	<li>... these requests block onload
-	<li>... but sharded CDN should be the optimal solution here.</ul>
-	<!-- separate slide -->
-	<li>HTML minification (10-30% savings)
-	<li>not everything is gzipped... includes/*.js ?
-	<li>images are not 100% optimized, we can do better, including our sprites
-	
-	<li>jquery is not minified with rest of our JS
-	<li>in some places we have deep level nesting - 15+ levels (<a href="http://mir.aculo.us/dom-monster/">DOMMonster</a>)
-	<li>we would like to try localStorage, and keep there YUI and jquery, and large inline scripts (1kB+) - <a href="addyosmani.github.io/basket.js/">basket.js</a>
-	  </ul>
-	  
-	  </article>
-	  <article class="smaller">
-	  <h3>Tips</h3>
-	  
-	  <h4>AKAMAI</h4>
-	  <p>
-	  When you specify a vary header, other than: <b>Vary:Accept-Encoding</b> AKAMAI won't cache anything!
-	  </p>
-	  
-	  <h4>Other</h4>
-	  
-	  <p>
-	  Don't be afraid to experiment
-	  <br>Use CSS instead of images if possible - (buttons? arrows? shadows? borders?)<br>
-	  <br>"Web performance & optimization is a process, not a checklist"
-	  "Don't ask for permission, ask for forgiveness."
-	  </p>
-	  <h4>Images</h3>
-	  <p>
-	  <ul> 
-	    
-	  <li>tune up the images delivery - use sharded CDN for static images (cookie-less)
-	  <li>Do you really want user wait, because you have to send 57 image requests ?<br>
-	  <small><i>Maybe you can load only the images visible on the viewport, and rest after onload?</i></small> 
-	  
-	  </ul>
-	  </article>
-	 	  
-	 <article class="smaller">
-	  <h3>The thing is...</h3>
-	  <i>
-	 	<blockquote>"It's not about how fast your website is, it's about how fast user thinks it is."</blockquote>
-		<blockquote>"The fastest HTTP request is the one not made."</blockquote>
-		<blockquote>"Know the rules well so you can break them efficiently"</blockquote>
-		<blockquote>"1kB of JS is 1ms of parsing"</blockquote>
-		<blockquote>"The more GIFs the better"</blockquote>
-		</i>
-		<center><img src="http://i.imgur.com/7s8APdU.gif"></center>
-	  </article>
-	  
-	  
-	  
-	  <article>
-	  <h3>Must read</h3>
-	  	<a href="http://www.smashingmagazine.com/2013/06/10/pinterest-paint-performance-case-study/">Gone In 60 Frames Per Second: A Pinterest Paint Performance Case Study</a> <br /><br />
-		
-		<a href="http://cdn.oreillystatic.com/en/assets/1/event/99/Prioritize%20Your%20Critical%20CSS%20and%20Images%20To%20Make%20Your%20Site%20Fast%20Presentation.pdf">Prioritize Your Critical CSS and Images to render site fast</a><br /><br />
-		<a href="http://www.igvita.com/slides/2012/devtools-tips-and-tricks/#38">DevTools Tips and Tricks</a><br /><br />
-		<a href="http://www.igvita.com/slides/2012/webperf-crash-course.pdf">WebPerf Crash Course</a><br /><br />
-		<a href="http://addyosmani.com/blog/performance-optimisation-with-timeline-profiles/">Improving Web App Performance With the Chrome DevTools Timeline and Profiles</a><br /><br />
-	  </article>
-	  
-	  
-	  
-	  
-	  
-	  
-	   
-	  <article class="smaller">
-	  <img src="./images/img1.png">
-	  <p>Two events here:
-	  <ul>
-	  <li>DOMContentLoaded / $(window).ready() &lt;- IE support and fallbacks <a href="https://github.com/jquery/jquery/blob/1.8.2/src/core.js#L828">[src]</a>
-	  <li>onload / $(window).load() &l; - exactly the same 
-	  </ul>
-		<p class="number">Performance tuning &nbsp;&nbsp; <b>1/25</b></p>
-	  </article>
-	  
-	 <article>
-		<h3>Chrome Dev Tools: Timeline &gt; Frames</h3>
-		<p>Best way to analyse application one step at a time</p>
-		<img src="./images/img2.png" width="800px">
-	 </article>
-	 	
-	 <article>
-		<h3>Chrome Dev Tools: Timeline &gt; Frames</h3>
-		<p>Best way to analyse application one step at a time</p>
-		<img src="./images/img3.png" width="800px">
-	 </article>
-	 
-	 <article>
-		<h3>Chrome Dev Tools: Timeline &gt; Frames</h3>
-		<p>Best way to analyse application one step at a time</p>
-		<img src="./images/img4.png" width="800px">
-	 </article>
+        window.addEventListener('load', function () {
+            var link = document.getElementsByTagName('link');
+            link[link.length - 1].setAttribute("media", "screen");
+        });
+    </script>
+</head>
+<style>
+    .slides.template-default > article:not(.nobackground):not(.biglogo) {
+        background-image: none !important;
+    }
+
+    .number {
+        width: 300px;
+        text-align: right;
+        font-size: 20px !important;
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+    }
+
+    .logo {
+        width: 147px;
+        height: 64px;
+        background-image: url("./images/tr.png");
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+    }
+</style>
+<body style='display: none'>
+<section class='slides layout-regular template-default'>
 <article>
-	<h3>We are aiming in 60fps. 1000ms / 60(fps) = 16.7ms.</h3>
-	<p>Chrome Dev Tools, can show us frames that more-less exceed that value:</p>
-	
+    <h1>
+        <img src="./images/tr.png"/>
+        <br/>
+    </h1>
+
+    <p>
+        Performance optimisation story
+    </p>
+
+    <p style="font-size:16px;text-align:right;margin-top:280px;"><b>with Marcin Wawrzyniak and Ignacio Garcia</b></p>
+</article>
+
+<article>
+
+    <h3>Quick roadmap</h3>
+    <ol>
+        <li> The problem
+        <li> The opportunity
+        <li> Problems and solutions
+        <li> Future improvements
+    </ol>
+
+</article>
+
+<article class="smaller">
+    <h3> The problem </h3>
+
+    <p>The problem is that when the page takes long to load,  <b>bounce rate</b> goes up and <b>user satisfaction drops</b>.</p>
+    <br/>
+    <center>
+        <p><img src="http://www.roaringtraffic.com/wp-content/uploads/2013/06/page-speed-abondonment-rate.jpeg"/></p>
+        <br/><br/>
+
+        <h3 class="red">First bits of TR showed up after 11 seconds</h3>
+    </center>
+    <p class="number">3 / 22</p>
+</article>
+
+<article class="smaller">
+    <h3>The opportunity</h3>
+
+    <p>A redesign of the homepage had to be done, so I asked Ignacio if we could tune up things a little bit...</p> <br/>
+
+    <h3>he said...</h3> <br/>
+
+    <center><img src="http://media.giphy.com/media/QBjH0bEtlZheg/giphy.gif"></center>
+    <p class="number">4 / 22</p>
+</article>
+
+<article class="smaller">
+    <img src="./images/nacho.jpg" width="800px"/>
+    <small><a style="font-size:12px;" href="http://www.imdb.com/title/tt0457510/">* Nacho Libre (2006) IMDB</a></small>
+    <p class="number">5 / 22</p>
 </article>
 
 
 <article class="smaller">
-	<h3>Let's say you want to debug frames before line 102</h3><br>
-	<img src="./images/img6.png" width="600px">
-	<p>Breakpoint. And when debugger stops, you can analyse the frames.</p>
-</article>
-<article>
-	<h3>In plans: localStorage</h3>
-	<img src="http://www.mobify.com/static/blog/2013/05/localStorage/plot-mean-bar.png">
-	basket.js
-	Oh... <a href="https://developers.google.com/speed/pagespeed/module/filter-local-storage-cache">mod_pagespeed</a> can do that
-</article>
-<article>
-	<h3>In plans: Sharded cookie-less CDN</h3>
-	Cookie of size 3kB increases the response time for <a href="http://yuiblog.com/blog/2007/03/01/performance-research-part-3/">78ms</a>. We have at least 9kB
-	of cookies being sent for static.trustedreviews.com.
-	
-</article>
-<article>
-	<h3>And then we can preview the Timeline:</h3>
-	<img src="./images/img7.png" width="800px">
-</article>
-	  <article>
-	  <h3>Audit / PageSpeed / YSlow / WebPageTest </h3>
-	  
-	  	<br />It's nothing fancy, we all use it.
-		<ul>
-			<li>First thing we did was running <a href="http://www.webpagetest.org/">WebPageTest</a> ...
-			<li>... the results almost killed us.
-			<li>... first bits of page showed up after 12 seconds (first load)
-			<img src="./images/1stripe.png">
-			
-			<li>... main reason ? tons of blocking JS of course
-			<li>... tons of CSS rules not being used almost at all
-			<li>... double facebook connect
-			<li>... tons of inline js
-			<li>... tons of head JS
-		</ul>		
-		
-		
-		
-		
-		<p class="number">2/25</p>
-	  </article>
+    <h3>Problem #1 Too much blocking assets on page load</h3>
+    <h4>We loaded a lot of stuff before user could see the page</h4>
+    <ul>
+        <li>
+        <li> Blocking (synchronous) JavaScript in head (inline or src)
 
-	  <article>
-		<img src="./images/performance-improvement.jpg" />
-		<p class="number">3/25</p>
-	  </article>
-	  
+        <li> Blocking (synchronous) JavaScript in body, placed randomly (inline or src)
+        <li> YUI ?
+        <li> jQuery ?
+        <li>Analytics ?
+        <li>Optimizely ?
+        <li>IPC includes ?
+        <li>Facebook connect?
+        <li>Post.it ?
+    </ul>
+    <p>Everytime the tokenizer gets into the &lt;script&gt; tag (<i>without async or defer</i>), it stops
+        <b>everything</b>, fetches the resource and/or parses the script - then it continues.
+    </p>
+    <p class="number">6 / 22</p>
+</article>
 
-	
-	</section>
 
-  </body>
+<article class="smaller">
+    <h3>The solutions</h3>
+    <h4>Minify and concatenate assets to make less requests</h4>
+    <p>Using sfCombine Plugin and YUI Compressor</p>
+    <h4>We load less stuff before the user sees the page using <u>defer</u> and <u>async</u> attributes.</h4>
+
+    <p>
+    <ul>
+        <li><b>async</b> <a href="http://caniuse.com/#search=async">&gt;=IE9</a> - "A script that will be run
+            asynchronously as soon as it is available", without blocking DOM construction
+        <li><b>defer</b> <a href="http://caniuse.com/#search=defer">&gt;=IE8</a> - "A script that will not run until
+            after the page has loaded"
+    </ul>
+    </p>
+
+    <br/>
+    <center><img src="http://avc.name/wp-content/uploads/2012/04/script-defer-asyn.jpg"/></center>
+    <p class="number">7 / 22</p>
+</article>
+
+
+<article class="smaller">
+    <h3>Optimizations we did</h3>
+
+    <ul>
+        <li>We moved the rest of images to sprites = 5 requests saved
+        <li>Combined almost every CSS stylesheet we had = 3 requests saved
+        <li>We removed the CSS for print, in two places = 2 requests
+        <li>Removed duplicated scripts (facebook...) - are you sure you don't have any ? = 1x304 (Not Modified) saved
+        <li>Disqus loading on scroll to comments box - 20 ? 30 ?
+        <li>Minified Omniture with rest of JS (doesn't matter, will be removed by end of year) = 1 request
+        <li><b>Made use of trViewKit::jsSlot() -&gt; moved all inline blocking JS to before body end - <i>probably</i>
+            big impact</b>
+        <li>And of course, we made use of async, in three places, wow.
+    </ul>
+    <center><img src="http://i.imgur.com/S25EO.gif"></center>
+    <p class="number">8 / 22</p>
+</article>
+
+<article class="smaller">
+    <h3>Results</h3>
+    <h4>Around 5 seconds of improvement</h4>
+    <img style="width: 750px;" src="images/new-relic.png"/>
+    <p class="number">9 / 22</p>
+</article>
+
+<article class="smaller">
+    <h3>WebPageTest results <a
+            href="http://www.webpagetest.org/video/compare.php?tests=131125_T3_104M%2C131117_96_KYR&thumbSize=200&ival=500&end=visual">before/after</a>
+    </h3>
+
+    <p>Before:</p>
+    <img src="http://i.imgur.com/doPd66m.png" width="800px"/>
+
+    <p>After:</p>
+    <img src="http://i.imgur.com/UpckA1R.png" width="800px"/>
+
+    <br/>
+    <center><img src="http://i.imgur.com/P5vYTiQ.png" width="500px"/></center>
+    <p class="number">10 / 22</p>
+</article>
+
+
+<article class="smaller">
+    <h3>Problem #2 Complex DOM and huge CSS files</h3>
+    <h4>Using tools like <u>Dom Monster</u> and the <u>Firefox 3D preview</u> we could identify pages with complex markup and with too much nested levels</h4>
+    <center><img src="images/dom-monster.png" width="750px"/></center>
+    <p class="number">11 / 22</p>
+</article>
+
+<article class="smaller">
+    <h3>Firefox 3D view</h3>
+    <p style="font-weight: bold;">Yeah, Firefox can do that...</p><br/>
+    <center><img src="http://i.imgur.com/cDkcOsw.png" width="600px"></center>
+    <p>Doing a refresh of the site was a good excuse to make a lighter DOM</p>
+    <p class="number">12 / 22</p>
+</article>
+
+<article class="smaller">
+    <h3>Make a lighter CSS using <u>SASS</u></h3>
+    <p>We had a legacy CSS file that had rules for pretty much all sections of the site.</p>
+    <p>We started splitting things up in smaller CSS files, and section by section of the site. That means that these process could be done gradually.</p>
+    <p>We went from having a massive file with <u>1500</u> lines of CSS to one with <u>600</u> lines in it.</p>
+    <h4>The results were really good, and much more than we expected so the site became <u>1.5 seconds faster</u></h4>
+    <h4>...and also we had a much better organised CSS structure. Things were under control again.</h4>
+    <p class="number">13 / 22</p>
+</article>
+
+<article class="smaller">
+    <h3>You can also improve the speed of CSS rendering avoiding:</h3>
+    <h4>Ancestors like</h4>
+    <pre>
+        html div tr td {
+            ...some css
+        }
+    </pre>
+    <h4>Universal selectors like</h4>
+    <pre>
+         * {
+            ...some css
+         }
+    </pre>
+    <h4>Github has a great presentation about this. We will provide the links at the end.</h4>
+    <p class="number">14 / 22</p>
+</article>
+
+<article class="smaller">
+    <h3>Problem #3 Loading things that we don´t need...yet!</h3>
+    <h4>Disqus was loading on every content page, but it appears pretty much at the end of it.</h4>
+    <h4>So we didn't load it on page load, but we activate it once the user scrolls to a certain position.</h4>
+    <a href="http://www.trustedreviews.com/google-chromecast_Gadget_review">See it in action</a>
+    <p class="number">15 / 22</p>
+</article>
+
+<article class="smaller">
+    <h3>In plans: 1/3</h3>
+    <center><img style="margin:auto" src="http://i.imgur.com/iWXoE85.png" /></center>
+    <ul>
+        <!-- separate slide -->
+        <li>
+            Sharded CDN (cookie-less) domains
+            <ul>
+                <li>no cookie payload (8kB)
+                <li> more
+                    parallel connections
+                <li>we would like to serve JS and CSS from static domains yet
+            </ul>
+            <p class="number">16 / 22</p>
+</article>
+
+<article class="smaller">
+    <h3>In plans: 2/3</h3>
+    <p>We would like to try lazy loading of images on the lists (<a href="https://github.com/toddmotto/echo">Echo?</a>)</p>
+    <ul>
+        <li>Usually out of viewport
+        <li>37 requests to static.trustedreviews.com
+        <li>... these requests delay onload
+        <li>... we can also load image when user scrolls to it
+        <li>... but sharded CDN can be the optimal solution here.
+    </ul>
+    <center><img src="http://d1ac1bzf3lrf3c.cloudfront.net/static/cache/7f/32/7f324b4ef6bd620c129677238af45ccb.jpg" width="650px"></center>
+    <p class="number">17 / 22</p>
+</article>
+<article class="smaller">
+    <h3>In plans: 3/3</h3>
+    <ul>
+        <li>HTML minification (10-30% smaller size, <a href="http://modpagespeed.com/">mod_pagespeed?</a>)
+        <li>not everything is gzipped... includes/*.js ?
+        <li>images are not 100% optimized, we can do better, including our sprites
+        <li>we would like to try localStorage, and keep there YUI and jquery, and large inline scripts (1kB+) - <a href="addyosmani.github.io/basket.js/">basket.js</a>
+    </ul>
+    <p class="number">18 / 22</p>
+</article>
+<article class="smaller">
+    <h3>Tips</h3>
+    <h4>AKAMAI</h4>
+    <p>
+        When you specify a vary header, other than: <b>Vary: Accept-Encoding</b> AKAMAI won't cache anything!
+    </p>
+    <h4>Other</h4>
+    <p>
+        Wait patiently for <a href="https://dvcs.w3.org/hg/webperf/raw-file/tip/specs/ResourcePriorities/Overview.html">postpone and lazyload</a> (Resource Priorities)<br>
+        <br>Use CSS instead of images if possible - buttons? arrows? shadows? borders? gradient? transparency? (<a href="http://css-shack.herokuapp.com/">CSS Shack - Photoshop for CSS</a>)<br>
+    </p>
+    <p class="number">19 / 22</p>
+</article>
+<article class="smaller">
+    <h3>The thing is...</h3>
+			<span style="font-size: 20px;">
+			<blockquote>"It's not about how fast your website is, it's about how fast user thinks it is." - S.Souders</blockquote>
+			<blockquote>"The fastest HTTP request is the one not made." - Some Genius</blockquote>
+			<blockquote>"Know the rules well so you can break them efficiently" - Dalai Lama</blockquote>
+			<blockquote>"1kB of JS is 1ms of parsing" - Google</blockquote>
+			<blockquote>"Web performance & optimization is a process, not a checklist" - I. Grigorik</blockquote>
+			<blockquote>"Don't ask for permission, ask for forgiveness." - Facebook</blockquote>
+			</span>
+    <center><img src="http://i.imgur.com/7s8APdU.gif"></center>
+    <p class="number">20 / 22</p>
+</article>
+<article class="smaller">
+    <h3>Must read</h3> <br >
+    <p>
+        <a href="http://www.smashingmagazine.com/2013/06/10/pinterest-paint-performance-case-study/">Gone In 60 Frames Per Second: A Pinterest Paint Performance Case Study</a> <br /><br />
+        <a href="http://cdn.oreillystatic.com/en/assets/1/event/99/Prioritize%20Your%20Critical%20CSS%20and%20Images%20To%20Make%20Your%20Site%20Fast%20Presentation.pdf">Prioritize Your Critical CSS and Images to render site fast</a><br /><br />
+        <a href="http://www.igvita.com/slides/2012/devtools-tips-and-tricks/#38">* DevTools Tips and Tricks</a><br /><br />
+        <a href="http://www.igvita.com/slides/2012/webperf-crash-course.pdf">* WebPerf Crash Course</a><br /><br />
+        <a href="http://addyosmani.com/blog/performance-optimisation-with-timeline-profiles/">Improving Web App Performance With the Chrome DevTools Timeline and Profiles</a><br /><br />
+        <a href="https://speakerdeck.com/jonrohan/githubs-css-performance">GitHub's CSS Performance</a><br /><br />
+    </p>
+    <p style="position:absolute;bottom:30px;left:65px;"><a style="color:orange;font-size:35px;" href="http://bit.do/trusted">http://bit.do/trusted</a></p>
+    <p>* If you don't have a lot of time, pick these two.</p>
+    <p class="number">21 / 22</p>
+</article>
+<article class="smaller">
+    <h2>Thanks!</h2>
+</article>
+
+
+</section>
+
+</body>
 </html>
