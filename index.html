@@ -64,6 +64,14 @@
         bottom: 20px;
         left: 20px;
     }
+
+    .ignacio {
+        color: red;
+    }
+
+    .marcin {
+        color: blue;
+    }
 </style>
 <body style='display: none'>
 <section class='slides layout-regular template-default'>
@@ -78,6 +86,7 @@
     </p>
 
     <p style="font-size:16px;text-align:right;margin-top:280px;"><b>with Marcin Wawrzyniak and Ignacio Garcia</b></p>
+    <p class="number ignacio">1</p>
 </article>
 
 <article>
@@ -89,7 +98,7 @@
         <li> Problems and solutions
         <li> Future improvements
     </ol>
-
+    <p class="number ignacio">2 / 22</p>
 </article>
 
 <article class="smaller">
@@ -103,7 +112,7 @@
 
         <h3 class="red">First bits of TR showed up after 11 seconds</h3>
     </center>
-    <p class="number">3 / 22</p>
+    <p class="number marcin">3 / 22</p>
 </article>
 
 <article class="smaller">
@@ -114,13 +123,13 @@
     <h3>he said...</h3> <br/>
 
     <center><img src="http://media.giphy.com/media/QBjH0bEtlZheg/giphy.gif"></center>
-    <p class="number">4 / 22</p>
+    <p class="number marcin">4 / 22</p>
 </article>
 
 <article class="smaller">
     <img src="./images/nacho.jpg" width="800px"/>
     <small><a style="font-size:12px;" href="http://www.imdb.com/title/tt0457510/">* Nacho Libre (2006) IMDB</a></small>
-    <p class="number">5 / 22</p>
+    <p class="number marcin">5 / 22</p>
 </article>
 
 
@@ -143,7 +152,7 @@
     <p>Everytime the tokenizer gets into the &lt;script&gt; tag (<i>without async or defer</i>), it stops
         <b>everything</b>, fetches the resource and/or parses the script - then it continues.
     </p>
-    <p class="number">6 / 22</p>
+    <p class="number marcin">6 / 22</p>
 </article>
 
 
@@ -164,33 +173,31 @@
 
     <br/>
     <center><img src="http://avc.name/wp-content/uploads/2012/04/script-defer-asyn.jpg"/></center>
-    <p class="number">7 / 22</p>
+    <p class="number marcin">7 / 22</p>
 </article>
 
 
 <article class="smaller">
-    <h3>Optimizations we did</h3>
+    <h3>Other optimisations we did</h3>
 
     <ul>
         <li>We moved the rest of images to sprites = 5 requests saved
         <li>Combined almost every CSS stylesheet we had = 3 requests saved
         <li>We removed the CSS for print, in two places = 2 requests
         <li>Removed duplicated scripts (facebook...) - are you sure you don't have any ? = 1x304 (Not Modified) saved
-        <li>Disqus loading on scroll to comments box - 20 ? 30 ?
-        <li>Minified Omniture with rest of JS (doesn't matter, will be removed by end of year) = 1 request
-        <li><b>Made use of trViewKit::jsSlot() -&gt; moved all inline blocking JS to before body end - <i>probably</i>
+        <li><b>Used trViewKit::jsSlot() -&gt; moved all inline blocking JS to before body end - <i>probably</i>
             big impact</b>
         <li>And of course, we made use of async, in three places, wow.
     </ul>
     <center><img src="http://i.imgur.com/S25EO.gif"></center>
-    <p class="number">8 / 22</p>
+    <p class="number marcin">8 / 22</p>
 </article>
 
 <article class="smaller">
     <h3>Results</h3>
     <h4>Around 5 seconds of improvement</h4>
     <img style="width: 750px;" src="images/new-relic.png"/>
-    <p class="number">9 / 22</p>
+    <p class="number marcin">9 / 22</p>
 </article>
 
 <article class="smaller">
@@ -293,9 +300,6 @@
 <article class="smaller">
     <h3>In plans: 3/3</h3>
     <ul>
-        <li>HTML minification (10-30% smaller size, <a href="http://modpagespeed.com/">mod_pagespeed?</a>)
-        <li>not everything is gzipped... includes/*.js ?
-        <li>images are not 100% optimized, we can do better, including our sprites
         <li>we would like to try localStorage, and keep there YUI and jquery, and large inline scripts (1kB+) - <a href="addyosmani.github.io/basket.js/">basket.js</a>
     </ul>
     <p class="number">18 / 22</p>
@@ -315,13 +319,8 @@
 </article>
 <article class="smaller">
     <h3>The thing is...</h3>
-			<span style="font-size: 20px;">
-			<blockquote>"It's not about how fast your website is, it's about how fast user thinks it is." - S.Souders</blockquote>
-			<blockquote>"The fastest HTTP request is the one not made." - Some Genius</blockquote>
-			<blockquote>"Know the rules well so you can break them efficiently" - Dalai Lama</blockquote>
-			<blockquote>"1kB of JS is 1ms of parsing" - Google</blockquote>
-			<blockquote>"Web performance & optimization is a process, not a checklist" - I. Grigorik</blockquote>
-			<blockquote>"Don't ask for permission, ask for forgiveness." - Facebook</blockquote>
+			<span style="font-size: 35px;">
+			<blockquote>"It doesn't matter how fast your website is as long as it is faster than the competition" </blockquote>
 			</span>
     <center><img src="http://i.imgur.com/7s8APdU.gif"></center>
     <p class="number">20 / 22</p>
@@ -341,7 +340,11 @@
     <p class="number">21 / 22</p>
 </article>
 <article class="smaller">
-    <h2>Thanks!</h2>
+    <h4>Thanks and happy Valentines day!</h4>
+    <br/><br/><br/>
+    <center><img src="images/kiss.png"></center>
+    <br/><br/>
+    <h4 style="float: right;">Questions and discussion...</h4>
 </article>
 
 
